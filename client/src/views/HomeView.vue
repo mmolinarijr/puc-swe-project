@@ -1,11 +1,12 @@
 <template>
-  <v-card>
+  <v-card class="pa-2">
     <v-card-title>
-      <h1>Home Page</h1>
+      <PanelView /> 
     </v-card-title>
   </v-card>
 </template>
 
 <script setup lang="ts">
+import PanelView from '@/components/layout/PanelView.vue';
 </script>
 

@@ -2,11 +2,11 @@
     <v-toolbar
         :elevation="3"
         class="w-100 mb-2"
-        prominent
-        title="Consulta Medica">
+        color="blue-darken-4"
+        title="Sistema de Gerenciamento de Consultas">
         <template #prepend>
-            <v-app-bar-nav-icon>
-                <v-icon>mdi-medical-bag</v-icon>
+            <v-app-bar-nav-icon to="/">
+                <v-avatar image="/src/assets/images/icons8-medical-96.png" size="50"></v-avatar>
             </v-app-bar-nav-icon>
         </template>
     </v-toolbar>
