@@ -10,7 +10,7 @@ export const menus = [
     {
         id: 2,
         title: 'Consultas',
-        descriptions: 'Agendamento de consultas, histórico de consultas e prontuário',
+        descriptions: 'Agendamento de consultas, histórico e prontuário',
         icon: 'mdi-medical-bag',
         color: 'secondary',
         link: '/consultas',

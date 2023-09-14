@@ -19,14 +19,15 @@
                         {{ item.title }}
                     </v-card-title>
 
-                    <v-card-subtitle class="text-no-wrap">
+                    <v-card-subtitle class="text-body-2 pl-0">
                         {{ item.descriptions }}
                     </v-card-subtitle>
                 </v-card-item>
 
                 <v-card-actions>
                     <v-btn
-                        color="info"
+                        :color="item.color"
+                        append-icon="mdi-arrow-right-bold-box"
                         :to="item.link">
                         Acessar
                     </v-btn>
