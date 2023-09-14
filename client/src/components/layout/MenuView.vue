@@ -55,7 +55,7 @@
                             <v-btn
                                 color="info"
                                 variant="tonal"
-                                @click="authStore.logout()">
+                                @click="authStore().logout()">
                                 Sim
                             </v-btn>
                             <v-spacer></v-spacer>
