@@ -73,6 +73,11 @@ import { authStore } from '@/stores/auth';
 
 const items = ref([
     {
+        title: "Sobre",
+        icon: "mdi-information-outline",
+        link: "/about",
+    },
+    {
         title: 'Sair',
         icon: 'mdi-exit-to-app',
         link: '/',
