@@ -1,38 +1,42 @@
 <template>
-    <div>
-        <v-card
-            class="pa-2 ma-1"
-            v-for="(item, index) in data"
+    <v-row class="mt-6 mb-6">
+        <v-col
+            v-for="(item, index) in menus"
             :key="index"
-            :title="item.title">
-        </v-card>
-    </div>
+            cols="12"
+            md="4">
+            <v-card class="pa-2 ma-1 mt-5">
+                <template #prepend>
+                    <v-avatar size="50">
+                        <v-icon :color="item.color" size="50">
+                            {{ item.icon }}
+                        </v-icon>
+                    </v-avatar>
+                </template>
+
+                <v-card-item>
+                    <v-card-title>
+                        {{ item.title }}
+                    </v-card-title>
+
+                    <v-card-subtitle class="text-no-wrap">
+                        {{ item.descriptions }}
+                    </v-card-subtitle>
+                </v-card-item>
+
+                <v-card-actions>
+                    <v-btn
+                        color="info"
+                        :to="item.link">
+                        Acessar
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-col>
+    </v-row>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-
-const data = ref([
-    {
-        title: 'Cadastrados',
-        icon: 'mdi-account',
-        link: '/cadastrados',
-    },
-    {
-        title: 'Consultas',
-        icon: 'mdi-calendar',
-        link: '/consultas',
-    },
-    {
-        title: 'Relatórios',
-        icon: 'mdi-file-chart',
-        link: '/relatorios',
-    },
-    {
-        title: 'Configurações',
-        icon: 'mdi-cog',
-        link: '/configuracoes',
-    }
-]);
+import { menus } from '@/services/menus';
 </script>
-

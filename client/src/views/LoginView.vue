@@ -85,6 +85,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import AlertView from '@/components/layout/AlertView.vue';
+
+const router = useRouter();
 
 const form = ref({
     email: '',
@@ -93,6 +97,7 @@ const form = ref({
 
 const login = () => {
     console.log('login', form.value);
+    router.push('/home');
 };
 </script>
 
