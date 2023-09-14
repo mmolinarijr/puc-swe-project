@@ -54,13 +54,8 @@ import { ref } from 'vue';
 import MenuView from './MenuView.vue';
 import { menus } from '@/services/menus';
 
-const drawer = ref(true);
-const rail = ref(true);
+const drawer = ref(false);
 
-const sidebar = ref({
-    rail: true,
-    drawer: true,
-});
 </script>
 
 <style>
