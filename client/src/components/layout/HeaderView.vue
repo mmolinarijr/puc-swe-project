@@ -11,7 +11,7 @@
                 <v-app-bar-nav-icon @click.stop="sidebar.rail = !sidebar.rail"></v-app-bar-nav-icon>
     
                 <v-app-bar-nav-icon to="/">
-                    <v-avatar image="/src/assets/images/icons8-medical-96.png" size="50"></v-avatar>
+                    <v-avatar image="medicalIcon.png" size="50"></v-avatar>
                 </v-app-bar-nav-icon>
                 
             </template>
