@@ -6,5 +6,5 @@ Final Project for PUC Minas Software Engineer post graduation program.
 * [Acessar Website](https://puc-swe-project-frontend.vercel.app/)
 
 ## Backend
-* Foat + Typescript
+* FoalTS + Typescript
 * [Acessar API](https://puc-swe-project-api.vercel.app/)
