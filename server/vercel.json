@@ -1,9 +1,7 @@
 {
     "version": 2,
     "name": "puc-swe-project-api",
-    "builds": [
-      { "src": "index", "use": "@vercel/node" }
-    ],
+    "functions": { "api": { "memory": 128, "maxDuration": 30 } },
     "routes": [
       { "src": "/api/(.*)", "dest": "./build/index" }
     ]
