@@ -43,9 +43,10 @@
                                     md="6">
                                     <v-btn
                                         variant="text"
+                                        @click="modals.appointment = true"
                                         color="secondary">
                                         <v-icon>mdi-pencil</v-icon>
-                                        Cadastrar
+                                        Nova Consulta
                                     </v-btn>
                                 </v-col>
 
@@ -101,19 +102,105 @@
         </v-card>
     </v-container>
 
-    <!-- Add new User -->
+    <!-- New Medical Appointment -->
+    <ModalView
+        v-model="modals.appointment"
+        :is-persistent="true"
+        title="Nova Consulta"
+        :submit="submit">
+        <template #body>
+            <v-row>
+                <v-col>
+                    <v-autocomplete
+                        label="Paciente"
+                        v-model="form.patient"
+                        required
+                        :rules="[(v) => !!v || 'Campo Obrigatorio']"
+                        :items="['Maria', 'Jose', 'Carlos', 'Irla', 'Amanda', 'Josefa']">
+                    </v-autocomplete>
+                </v-col>
+                <v-col>
+                    <v-text-field
+                        label="Data"
+                        v-model="form.date"
+                        :rules="[(v) => !!v || 'Campo Obrigatorio']"
+                        required
+                        type="date"
+                        outlined
+                        dense>
+                    </v-text-field>
+                </v-col>
+            </v-row>
 
-    <ModalView />
+            <v-row>
+                <v-col>
+                    <v-textarea
+                        :rules="[(v) => !!v || 'Campo Obrigatorio']"
+                        required
+                        label="Descricao"
+                        v-model="form.description">
+                    </v-textarea>
+                </v-col>
+            </v-row>
+        </template>
+
+        <template #footer>
+            <v-btn
+                color="secondary"
+                @click="modals.appointment = false">
+                Cancelar
+            </v-btn>
+            <v-btn
+                color="secondary"
+                variant="tonal"
+                append-icon="mdi-content-save"
+                type="submit">
+                Salvar
+            </v-btn>
+        </template>
+    </ModalView>
+
+    <LoadingView v-model="state.isLoading" />
 
     <FooterViewVue />
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import HeaderViewVue from '@/components/layout/HeaderView.vue';
 import FooterViewVue from '@/components/layout/FooterView.vue';
 import GoBackBtnVue from '@/components/layout/GoBackBtn.vue';
 import ModalView from '@/components/layout/ModalView.vue';
+import LoadingView from '@/components/layout/LoadingView.vue';
+
+const modals = ref({
+    appointment: false,
+});
+
+watch(
+    () => modals.value.appointment,
+    () => {
+        if (modals.value.appointment) {
+            form.value.patient = '';
+            form.value.date = '';
+            form.value.description = '';
+        }
+    }
+);
+
+const state = ref({
+    isLoading: false,
+});
+
+const form = ref({
+    patient: '',
+    date: '',
+    description: '',
+});
+
+const submit = () => {
+    console.log('submit form', form.value);
+};
 </script>
 
 <style scoped></style>

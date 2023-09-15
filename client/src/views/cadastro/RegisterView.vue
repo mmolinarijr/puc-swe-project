@@ -43,6 +43,7 @@
                                     md="6">
                                     <v-btn
                                         variant="text"
+                                        @click="modals.register = true"
                                         color="primary">
                                         <v-icon>mdi-pencil</v-icon>
                                         Cadastrar
@@ -102,8 +103,54 @@
     </v-container>
 
     <!-- Add new User -->
+    <ModalView
+        v-model="modals.register"
+        :submit="submit"
+        title="Cadastro de Usuarios do Sistema">
+        <template #body>
+            <v-row>
+                <v-col>
+                    <v-text-field
+                        label="Nome"
+                        outlined
+                        v-model="form.name"
+                        dense>
+                    </v-text-field>
+                </v-col>
+                <v-col>
+                    <v-text-field
+                        label="E-mail"
+                        v-model="form.email"
+                        outlined
+                        dense>
+                    </v-text-field>
+                </v-col>
+            </v-row>
 
-    <ModalView />
+            <v-row>
+                <v-col>
+                    <v-select v-model="form.type" label="Tipo" :items="['medico', 'paciente']"></v-select>
+                </v-col>
+            </v-row>
+        </template>
+
+        <template #footer>
+            <v-btn
+                color="primary"
+                @click="modals.register = false">
+                Cancelar
+            </v-btn>
+            <v-btn
+                color="primary"
+                variant="tonal"
+                append-icon="mdi-account-plus"
+                type="submit">
+                Cadastrar
+            </v-btn>
+        </template>
+    </ModalView>
+
+    <LoadingView v-model="state.isLoading" />
 
     <FooterViewVue />
 </template>
@@ -114,6 +161,25 @@ import HeaderViewVue from '@/components/layout/HeaderView.vue';
 import FooterViewVue from '@/components/layout/FooterView.vue';
 import GoBackBtnVue from '@/components/layout/GoBackBtn.vue';
 import ModalView from '@/components/layout/ModalView.vue';
+import LoadingView from '@/components/layout/LoadingView.vue';
+
+const modals = ref({
+    register: false,
+});
+
+const state = ref({
+    isLoading: false,
+})
+
+const form = ref({
+    name: '',
+    email: '',
+    type: '',
+});
+
+const submit = () => {
+    console.log('submit form', form.value);
+};
 </script>
 
 <style scoped></style>

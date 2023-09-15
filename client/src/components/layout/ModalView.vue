@@ -1,15 +1,22 @@
 <template>
-    <v-dialog>
-        <v-card :class="props.cardClass">
-            <v-card-item>
-                <v-card-title>{{ props.title }}</v-card-title>
-                <v-card-subtitle>props.subtitle</v-card-subtitle>
-            </v-card-item>
-
-            <v-card-text>{{props.text}}</v-card-text>
-
-            <v-card-actions>{{ props.actions }}</v-card-actions>
-        </v-card>
+    <v-dialog :persistent="props.isPersistent">
+        <v-form @submit.prevent="props.submit">
+            <v-card :class="props.cardClass">
+                <v-card-item>
+                    <v-card-title class="text-center">{{ props.title }}</v-card-title>
+                    <v-card-subtitle>{{ props.subtitle }}</v-card-subtitle>
+                </v-card-item>
+    
+                <v-card-text>
+                    {{ props.text }}
+                    <slot name=body></slot>
+                </v-card-text>
+    
+                <v-card-actions class="text-center">
+                    <slot name=footer></slot>
+                </v-card-actions>
+            </v-card>
+        </v-form>
     </v-dialog>
 </template>
 
@@ -17,27 +24,26 @@
 const props = defineProps({
     title: {
         type: String,
-        default: 'Modal Title'
     },
     subtitle: {
         type: String,
-        default: 'Modal Subtitle'
     },
     text: {
         type: String,
-        default: 'Modal Text'
-    },
-    actions: {
-        type: String,
-        default: 'Modal Actions'
     },
     cardClass: {
         type: String,
-        default: 'elevation-12'
+        default: 'elevation-12',
+    },
+    submit: {
+        type: Function,
+        default: () => {},
+    },
+    isPersistent: {
+        type: Boolean,
+        default: false,
     },
 });
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

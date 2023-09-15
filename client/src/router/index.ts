@@ -32,7 +32,7 @@ const router = createRouter({
         {
             path: '/consultas',
             name: 'consulta',
-            component: () => import('../views/consulta/QueryView.vue'),
+            component: () => import('../views/consulta/AppointmentView.vue'),
         },
         {
             path: '/relatorios',
