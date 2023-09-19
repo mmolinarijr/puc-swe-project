@@ -13,7 +13,7 @@ const options = {
         consumes: ['application/json'],
         produces: ['application/json'],
 
-        tags: [{ name: 'Hello World' }, { name: 'Version' }],
+        // tags: [{ name: 'Hello World' }, { name: 'Version' }],
     },
     apis: ['./src/model/*.mjs', './src/router.mjs'],
 };
