@@ -34,7 +34,7 @@ router.get('/appointment', async (req, res) => {
 router.post('/appointment', async (req, res) => {
     console.log('POST /api/appointment', req.params.id, req.body);
     res.send(req.body);
-    await appointment.create(req.params.id, req.body);
+    await appointment.create(req.body);
 });
 
 export default router;

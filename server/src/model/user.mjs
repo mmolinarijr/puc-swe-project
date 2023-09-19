@@ -1,12 +1,12 @@
 import sql from '../config/db.mjs';
 
-async function create({ username, password, type, email }) {
+async function create({ name, password, type, email }) {
     try {
         const [user] = await sql`
             insert into username
-                (username, password, type, email)
+                (name, password, type, email)
             values
-                (${username}, ${password}, ${type}, ${email})
+                (${name}, ${password}, ${type}, ${email})
             returning *;
         `;
 
@@ -22,6 +22,8 @@ async function read() {
         const users = await sql`
             select * from username;
         `;
+
+        console.log('11read - ', users);
 
         return users;
     } catch (error) {
