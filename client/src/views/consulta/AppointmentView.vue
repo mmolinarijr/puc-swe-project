@@ -171,7 +171,9 @@
         </template>
     </ModalView>
 
-    <LoadingView v-model="state.isLoading" />
+    <LoadingView
+        color="secondary"
+        v-model="state.isLoading" />
 
     <FooterViewVue />
 </template>
@@ -188,9 +190,8 @@ import ModalView from '@/components/layout/ModalView.vue';
 import LoadingView from '@/components/layout/LoadingView.vue';
 
 onMounted(async () => {
-    console.log('mounted');
-    await getUser();
     await getAppointments();
+    await getUser();
 });
 
 const api = ref(import.meta.env.VITE_API_URL);
