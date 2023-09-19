@@ -5,11 +5,33 @@ import appointment from './model/appointment.mjs';
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /api:
+ *   get:
+ *     tags:
+ *       - Hello World
+ *     description: Returns the API Hello World message
+ *     responses:
+ *       '200':
+ *         description: successful response
+ */
 router.get('/', (req, res) => {
     console.log('GET /api');
     res.send('Hello World!');
 });
 
+/**
+ * @swagger
+ * /api/version:
+ *   get:
+ *     tags:
+ *       - Version
+ *     description: Returns the PostGres Database version
+ *     responses:
+ *       '200':
+ *         description: successful response
+ */
 router.get('/version', async (req, res) => {
     console.log('GET /api/version');
     res.send(await version);
