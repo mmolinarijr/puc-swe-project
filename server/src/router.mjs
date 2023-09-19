@@ -2,6 +2,7 @@ import express from 'express';
 import version from './model/db-version.mjs';
 import user from './model/user.mjs';
 import appointment from './model/appointment.mjs';
+import passport from '../passportConfig.js';
 
 const router = express.Router();
 
@@ -20,6 +21,26 @@ router.get('/', (req, res) => {
     console.log('GET /api');
     res.send('Puc SWE Project API');
 });
+
+/**
+ * @swagger
+ * /api:
+ *   post:
+ *     tags:
+ *       - Login
+ *     description: tries to login
+ *     responses:
+ *       '200':
+ *         description: successful response
+ */
+router.post(
+    '/login',
+    passport.authenticate('local', {
+        successRedirect: '/api/user',
+        failureRedirect: '/api/login',
+        failureFlash: true,
+    })
+);
 
 /**
  * @swagger
@@ -65,9 +86,37 @@ router.get('/user', async (req, res) => {
  *         description: successful response
  */
 router.post('/user', async (req, res) => {
-    console.log('POST /api/user', req.body);
-    await user.create(req.body);
-    res.send(res);
+    try {
+        console.log('POST /api/user', req.body);
+        await user.create(req.body);
+        res.status(200).send('User created');
+    } catch (error) {
+        console.error('POST /api/user', error);
+        res.status(500).send('Internal Server Error' + error);
+    }
+});
+
+/**
+ * @swagger
+ * /api/user/{id}:
+ *   delete:
+ *     tags:
+ *       - User
+ *     parameters: id
+ *     description: Deletes a user by Id
+ *     responses:
+ *       '200':
+ *         description: successful response
+ */
+router.delete('/user/:id', async (req, res) => {
+    try {
+        console.log('DELETE /api/user', req.params.id);
+        await user.deleteById(req.params.id);
+        res.status(200).send('User deleted successfully');
+    } catch (error) {
+        console.error('DELETE /api/user', error);
+        res.status(500).send('Internal Server Error' + error);
+    }
 });
 
 /**
@@ -98,9 +147,14 @@ router.get('/appointment', async (req, res) => {
  *         description: successful response
  */
 router.post('/appointment', async (req, res) => {
-    console.log('POST /api/appointment', req.params.id, req.body);
-    await appointment.create(req.body);
-    res.send(res);
+    try {
+        console.log('POST /api/appointment', req.params.id, req.body);
+        await appointment.create(req.body);
+        res.status(200).send('Appointment created successfully');
+    } catch (error) {
+        console.error('POST /api/appointment', error);
+        res.status(500).send('Internal Server Error' + error);
+    }
 });
 
 export default router;
