@@ -4,7 +4,7 @@
         class="align-center justify-center">
         <v-progress-circular
             class="ml-3"
-            color="teal"
+            :color="props.color"
             indeterminate
             :width="9"
             size="60">
@@ -19,7 +19,12 @@
 </template>
 
 <script setup lang="ts">
-
+const props = defineProps({
+    color: {
+        type: String,
+        default: 'teal'
+    }
+})
 </script>
 
 <style scoped>

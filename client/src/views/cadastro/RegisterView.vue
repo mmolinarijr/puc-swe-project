@@ -149,7 +149,7 @@
         </template>
     </ModalView>
 
-    <LoadingView v-model="state.isLoading" />
+    <LoadingView color="primary" v-model="state.isLoading" />
 
     <FooterViewVue />
 </template>
