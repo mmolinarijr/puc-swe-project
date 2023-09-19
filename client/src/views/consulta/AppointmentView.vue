@@ -6,7 +6,7 @@
         fluid>
         <v-row class="mt-6">
             <v-col>
-                <v-form>
+                <v-form @submit.prevent="getAppointments">
                     <v-card>
                         <v-card-title>
                             <GoBackBtnVue color="secondary" />
@@ -18,20 +18,27 @@
                                 <v-col>
                                     <v-text-field
                                         label="Id"
+                                        v-model="searchParams.id"
                                         outlined
-                                        dense></v-text-field>
+                                        dense>
+                                    </v-text-field>
                                 </v-col>
                                 <v-col>
                                     <v-text-field
                                         label="Nome"
+                                        v-model="searchParams.name"
                                         outlined
-                                        dense></v-text-field>
+                                        dense>
+                                    </v-text-field>
                                 </v-col>
                                 <v-col>
                                     <v-text-field
-                                        label="E-mail"
+                                        label="Data"
+                                        v-model="searchParams.date"
+                                        type="date"
                                         outlined
-                                        dense></v-text-field>
+                                        dense>
+                                    </v-text-field>
                                 </v-col>
                             </v-row>
                         </v-card-text>
@@ -60,6 +67,7 @@
                                     <v-btn
                                         append-icon="mdi-account-search"
                                         color="secondary"
+                                        type="submit"
                                         variant="tonal">
                                         Pesquisar
                                     </v-btn>
@@ -77,7 +85,9 @@
             <v-table>
                 <thead>
                     <tr>
-                        <th scope="col">Id</th>
+                        <th scope="col">
+                            <v-chip>ID</v-chip>
+                        </th>
                         <th scope="col">Nome</th>
                         <th scope="col">Data</th>
                         <th scope="col">Descricao</th>
@@ -91,8 +101,8 @@
                         <td>
                             <v-chip>{{ item.id }}</v-chip>
                         </td>
-                        <td>{{ item.user_id }}</td>
-                        <td>{{ item.date }}</td>
+                        <td>{{ item.name }}</td>
+                        <td>{{ convertDate(item.date) }}</td>
                         <td>{{ item.description }}</td>
                     </tr>
                 </tbody>
@@ -116,7 +126,7 @@
                         required
                         :rules="[(v) => !!v || 'Campo Obrigatorio']"
                         :return-object="false"
-                        item-title="username"
+                        item-title="name"
                         item-value="id">
                     </v-autocomplete>
                 </v-col>
@@ -170,6 +180,7 @@
 import { ref, watch, onMounted } from 'vue';
 import { userStore } from '@/stores/user';
 import axios from 'axios';
+import { convertDate } from '../../utils/common';
 import HeaderViewVue from '@/components/layout/HeaderView.vue';
 import FooterViewVue from '@/components/layout/FooterView.vue';
 import GoBackBtnVue from '@/components/layout/GoBackBtn.vue';
@@ -205,6 +216,12 @@ const state = ref({
 });
 
 const users = ref([]) as any;
+
+const searchParams = ref({
+    id: '',
+    name: '',
+    date: '',
+});
 
 const form = ref({
     user: undefined,

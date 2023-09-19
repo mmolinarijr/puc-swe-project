@@ -89,7 +89,7 @@
                         v-for="(item, index) in apiData"
                         :key="index">
                         <td>{{ item.id }}</td>
-                        <td>{{ item.username }}</td>
+                        <td>{{ item.name }}</td>
                         <td>{{ item.email }}</td>
                         <td>{{ item.type }}</td>
                     </tr>
@@ -219,7 +219,7 @@ const registerUser = async () => {
     console.log('submit api', api.value);
 
     const params = {
-        username: form.value.name,
+        name: form.value.name,
         password: form.value.email,
         type: form.value.type,
         email: form.value.email,
