@@ -33,14 +33,25 @@ router.get('/', (req, res) => {
  *       '200':
  *         description: successful response
  */
-router.post(
-    '/login',
-    passport.authenticate('local', {
-        successRedirect: '/api/user',
-        failureRedirect: '/api/login',
-        failureFlash: true,
-    })
-);
+router.post('/login', (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+        if (err) {
+            console.log('err - ', err);
+            return next(err);
+        }
+
+        if (!user) {
+            console.log('!user - ', user);
+            return res.status(401).json({ message: 'Authentication failed' });
+        }
+
+        console.log('err - ', err);
+        console.log('user - ', user);
+        console.log('info - ', info);
+
+        return res.status(200).json({ message: 'User logged in successfully' });
+    })(req, res, next);
+});
 
 /**
  * @swagger

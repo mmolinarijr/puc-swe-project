@@ -9,16 +9,16 @@ import router from './src/router.mjs';
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(passport.initialize());
-
 app.use(
     session({
         secret: 'a8f5f167f44f4964e6c998dee827110c',
         resave: false,
         saveUninitialized: false,
+        cookie: { secure: true },
     })
 );
 
+app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
