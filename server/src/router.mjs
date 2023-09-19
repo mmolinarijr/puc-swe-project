@@ -11,14 +11,14 @@ const router = express.Router();
  *   get:
  *     tags:
  *       - API
- *     description: Returns the API Hello World message
+ *     description: Returns the API default message
  *     responses:
  *       '200':
  *         description: successful response
  */
 router.get('/', (req, res) => {
     console.log('GET /api');
-    res.send('Hello World!');
+    res.send('Puc SWE Project API');
 });
 
 /**
@@ -66,8 +66,8 @@ router.get('/user', async (req, res) => {
  */
 router.post('/user', async (req, res) => {
     console.log('POST /api/user', req.body);
-    res.send(req.body);
     await user.create(req.body);
+    res.send(res);
 });
 
 /**
@@ -99,8 +99,8 @@ router.get('/appointment', async (req, res) => {
  */
 router.post('/appointment', async (req, res) => {
     console.log('POST /api/appointment', req.params.id, req.body);
-    res.send(req.body);
     await appointment.create(req.body);
+    res.send(res);
 });
 
 export default router;
