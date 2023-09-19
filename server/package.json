@@ -1,25 +1,25 @@
 {
-  "name": "express-api",
-  "version": "1.0.0",
-  "description": "",
-  "main": "app.mjs",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.mjs"
-  },
-  "author": "mmolinarijr",
-  "type": "module",
-  "license": "ISC",
-  "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2",
-    "pg": "^8.11.3",
-    "postgres": "^3.3.5",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.1"
-  }
+    "name": "puc-swe-project-api",
+    "version": "1.0.0",
+    "description": "",
+    "main": "app.mjs",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "nodemon app.mjs"
+    },
+    "author": "mmolinarijr",
+    "type": "module",
+    "license": "ISC",
+    "dependencies": {
+        "cors": "^2.8.5",
+        "dotenv": "^16.3.1",
+        "express": "^4.18.2",
+        "pg": "^8.11.3",
+        "postgres": "^3.3.5",
+        "swagger-jsdoc": "^6.2.8",
+        "swagger-ui-express": "^5.0.0"
+    },
+    "devDependencies": {
+        "nodemon": "^3.0.1"
+    }
 }
