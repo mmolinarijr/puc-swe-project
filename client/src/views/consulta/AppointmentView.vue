@@ -79,17 +79,21 @@
                     <tr>
                         <th scope="col">Id</th>
                         <th scope="col">Nome</th>
-                        <th scope="col">E-mail</th>
-                        <th scope="col">Ações</th>
+                        <th scope="col">Data</th>
+                        <th scope="col">Descricao</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    <tr v-for="(item, index) in apiData" :key="index">
-                        <td>{{ item.paciente }}</td>
-                        <td>João</td>
-                        <td></td>
-                        <td>sdsdsd</td>
+                    <tr
+                        v-for="(item, index) in apiData"
+                        :key="index">
+                        <td>
+                            <v-chip>{{ item.id }}</v-chip>
+                        </td>
+                        <td>{{ item.user_id }}</td>
+                        <td>{{ item.date }}</td>
+                        <td>{{ item.description }}</td>
                     </tr>
                 </tbody>
             </v-table>
@@ -107,10 +111,13 @@
                 <v-col>
                     <v-autocomplete
                         label="Paciente"
-                        v-model="form.patient"
+                        v-model="form.user"
+                        :items="users"
                         required
                         :rules="[(v) => !!v || 'Campo Obrigatorio']"
-                        :items="['Maria', 'Jose', 'Carlos', 'Irla', 'Amanda', 'Josefa']">
+                        :return-object="false"
+                        item-title="username"
+                        item-value="id">
                     </v-autocomplete>
                 </v-col>
                 <v-col>
@@ -161,6 +168,7 @@
 
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue';
+import { userStore } from '@/stores/user';
 import axios from 'axios';
 import HeaderViewVue from '@/components/layout/HeaderView.vue';
 import FooterViewVue from '@/components/layout/FooterView.vue';
@@ -170,8 +178,8 @@ import LoadingView from '@/components/layout/LoadingView.vue';
 
 onMounted(async () => {
     console.log('mounted');
-    await getData();
-    
+    await getUser();
+    await getAppointments();
 });
 
 const api = ref(import.meta.env.VITE_API_URL);
@@ -185,9 +193,9 @@ watch(
     () => modals.value.appointment,
     () => {
         if (modals.value.appointment) {
-            form.value.patient = '';
             form.value.date = '';
             form.value.description = '';
+            form.value.user = undefined;
         }
     }
 );
@@ -196,19 +204,29 @@ const state = ref({
     isLoading: false,
 });
 
+const users = ref([]) as any;
+
 const form = ref({
-    patient: '',
+    user: undefined,
     date: '',
     description: '',
 });
 
-const getData = async () => {
+const getUser = async () => {
+    const response = await userStore().getUser();
+    const filteredResponse = response.filter((item: any) => item.type === 'paciente');
+    console.log('22 getUser users', response);
+
+    users.value = filteredResponse;
+};
+
+const getAppointments = async () => {
     console.log('get data');
 
     state.value.isLoading = true;
 
     try {
-        const response = await axios.get(`${api.value}/consulta`);
+        const response = await axios.get(`${api.value}/appointment`);
 
         console.log('getData - response', response);
 
@@ -224,18 +242,23 @@ const submit = async () => {
     console.log('submit form', form.value);
 
     const params = {
-        paciente: form.value.patient,
-        data: form.value.date,
-        descricao: form.value.description,
+        user_id: form.value.user,
+        date: form.value.date,
+        description: form.value.description,
     };
 
+    console.log('submit params', params);
+
     try {
-        const response = await axios.post(`${api.value}/consulta`, params);
+        const response = await axios.post(`${api.value}/appointment`, params);
         console.log('submit - response', response);
+
+        if (response.status === 200) {
+            modals.value.appointment = false;
+            await getAppointments();
+        }
     } catch (error) {
         console.log('error', error);
-    } finally {
-        modals.value.appointment = false;
     }
 };
 </script>

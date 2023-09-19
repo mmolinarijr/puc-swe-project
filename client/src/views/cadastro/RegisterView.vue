@@ -101,7 +101,7 @@
     <!-- Add new User -->
     <ModalView
         v-model="modals.register"
-        :submit="submit"
+        :submit="registerUser"
         title="Cadastro de Usuarios do Sistema">
         <template #body>
             <v-row>
@@ -149,13 +149,15 @@
         </template>
     </ModalView>
 
-    <LoadingView color="primary" v-model="state.isLoading" />
+    <LoadingView
+        color="primary"
+        v-model="state.isLoading" />
 
     <FooterViewVue />
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import axios from 'axios';
 import HeaderViewVue from '@/components/layout/HeaderView.vue';
 import FooterViewVue from '@/components/layout/FooterView.vue';
@@ -185,6 +187,17 @@ const form = ref({
     type: '',
 });
 
+watch(
+    () => modals.value.register,
+    () => {
+        if (modals.value.register) {
+            form.value.name = '';
+            form.value.email = '';
+            form.value.type = '';
+        }
+    }
+);
+
 const getUsers = async () => {
     state.value.isLoading = true;
 
@@ -201,7 +214,7 @@ const getUsers = async () => {
     }
 };
 
-const submit = async () => {
+const registerUser = async () => {
     console.log('submit form', form.value);
     console.log('submit api', api.value);
 
