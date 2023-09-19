@@ -77,25 +77,21 @@
             <v-table>
                 <thead>
                     <tr>
-                        <th>Id</th>
-                        <th>Nome</th>
-                        <th>E-mail</th>
-                        <th>Ações</th>
+                        <th scope="col">Id</th>
+                        <th scope="col">Nome</th>
+                        <th scope="col">E-mail</th>
+                        <th scope="col">Tipo</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>João</td>
-                        <td>
-                            <v-chip
-                                color="primary"
-                                label
-                                >ddfd
-                            </v-chip>
-                        </td>
-                        <td>sdsdsd</td>
+                    <tr
+                        v-for="(item, index) in apiData"
+                        :key="index">
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.username }}</td>
+                        <td>{{ item.email }}</td>
+                        <td>{{ item.type }}</td>
                     </tr>
                 </tbody>
             </v-table>
@@ -129,7 +125,10 @@
 
             <v-row>
                 <v-col>
-                    <v-select v-model="form.type" label="Tipo" :items="['medico', 'paciente']"></v-select>
+                    <v-select
+                        v-model="form.type"
+                        label="Tipo"
+                        :items="['medico', 'paciente']"></v-select>
                 </v-col>
             </v-row>
         </template>
@@ -156,12 +155,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
 import HeaderViewVue from '@/components/layout/HeaderView.vue';
 import FooterViewVue from '@/components/layout/FooterView.vue';
 import GoBackBtnVue from '@/components/layout/GoBackBtn.vue';
 import ModalView from '@/components/layout/ModalView.vue';
 import LoadingView from '@/components/layout/LoadingView.vue';
+
+onMounted(async () => {
+    console.log('mounted');
+    await getUsers();
+});
+
+const api = ref(import.meta.env.VITE_API_URL);
+const apiData = ref([]) as any;
 
 const modals = ref({
     register: false,
@@ -169,7 +177,7 @@ const modals = ref({
 
 const state = ref({
     isLoading: false,
-})
+});
 
 const form = ref({
     name: '',
@@ -177,9 +185,42 @@ const form = ref({
     type: '',
 });
 
-const submit = () => {
+const getUsers = async () => {
+    state.value.isLoading = true;
+
+    try {
+        const response = await axios.get(`${api.value}/user`);
+
+        console.log('getUsers - response', response);
+
+        apiData.value = response.data;
+    } catch (error) {
+        console.log('error', error);
+    } finally {
+        state.value.isLoading = false;
+    }
+};
+
+const submit = async () => {
     console.log('submit form', form.value);
+    console.log('submit api', api.value);
+
+    const params = {
+        username: form.value.name,
+        password: form.value.email,
+        type: form.value.type,
+        email: form.value.email,
+    };
+
+    try {
+        const response = await axios.post(`${api.value}/user`, params);
+
+        console.log('submit - response', response);
+    } catch (error) {
+        console.log('error', error);
+    } finally {
+        modals.value.register = false;
+        await getUsers();
+    }
 };
 </script>
-
-<style scoped></style>

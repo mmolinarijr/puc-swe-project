@@ -77,24 +77,18 @@
             <v-table>
                 <thead>
                     <tr>
-                        <th>Id</th>
-                        <th>Nome</th>
-                        <th>E-mail</th>
-                        <th>Ações</th>
+                        <th scope="col">Id</th>
+                        <th scope="col">Nome</th>
+                        <th scope="col">E-mail</th>
+                        <th scope="col">Ações</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    <tr>
-                        <td>1</td>
+                    <tr v-for="(item, index) in apiData" :key="index">
+                        <td>{{ item.paciente }}</td>
                         <td>João</td>
-                        <td>
-                            <v-chip
-                                color="primary"
-                                label
-                                >ddfd
-                            </v-chip>
-                        </td>
+                        <td></td>
                         <td>sdsdsd</td>
                     </tr>
                 </tbody>
@@ -166,12 +160,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
+import axios from 'axios';
 import HeaderViewVue from '@/components/layout/HeaderView.vue';
 import FooterViewVue from '@/components/layout/FooterView.vue';
 import GoBackBtnVue from '@/components/layout/GoBackBtn.vue';
 import ModalView from '@/components/layout/ModalView.vue';
 import LoadingView from '@/components/layout/LoadingView.vue';
+
+onMounted(async () => {
+    console.log('mounted');
+    await getData();
+    
+});
+
+const api = ref(import.meta.env.VITE_API_URL);
+const apiData = ref([]) as any;
 
 const modals = ref({
     appointment: false,
@@ -198,9 +202,40 @@ const form = ref({
     description: '',
 });
 
-const submit = () => {
+const getData = async () => {
+    console.log('get data');
+
+    state.value.isLoading = true;
+
+    try {
+        const response = await axios.get(`${api.value}/consulta`);
+
+        console.log('getData - response', response);
+
+        apiData.value = response.data;
+    } catch (error) {
+        console.log('error', error);
+    } finally {
+        state.value.isLoading = false;
+    }
+};
+
+const submit = async () => {
     console.log('submit form', form.value);
+
+    const params = {
+        paciente: form.value.patient,
+        data: form.value.date,
+        descricao: form.value.description,
+    };
+
+    try {
+        const response = await axios.post(`${api.value}/consulta`, params);
+        console.log('submit - response', response);
+    } catch (error) {
+        console.log('error', error);
+    } finally {
+        modals.value.appointment = false;
+    }
 };
 </script>
-
-<style scoped></style>
