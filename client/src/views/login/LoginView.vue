@@ -14,6 +14,7 @@
                             class="mx-6 py-6 text-center"
                             justify-center
                             align-center>
+                            Sistema de Gerenciamento de Consultas
                             <v-img
                                 :width="300"
                                 class="mx-auto"
@@ -33,6 +34,7 @@
                                     <v-text-field
                                         v-model="form.username"
                                         label="Usuário"
+                                        autofocus
                                         outlined
                                         :rules="[(v) => !!v || 'Usuário é obrigatório']"
                                         dense

@@ -13,10 +13,13 @@
                     </v-btn>
                 </v-app-bar-nav-icon>
                 <v-avatar
+                    class="d-none d-sm-flex"
                     image="medicalIcon.png"
-                    size="50">
+                    size="45">
                 </v-avatar>
-                <v-app-bar-title class="text-no-wrap"> Sistema de Gerenciamento de Consultas </v-app-bar-title>
+                <v-app-bar-title class="text-no-wrap text-end text-body-2 text-md-h6">
+                    Sistema de Gerenciamento de Consultas
+                </v-app-bar-title>
             </template>
 
             <template #append>
@@ -32,9 +35,10 @@
                 <v-list-item
                     v-for="(item, index) in menus"
                     :key="index"
+                    :disabled="item.active === false"
                     :to="item.link">
                     <v-list-item-title>
-                        <v-btn variant="plain">
+                        <v-btn variant="text">
                             <v-icon
                                 class="pr-2"
                                 size="20">
@@ -42,6 +46,12 @@
                             </v-icon>
                             {{ item.title }}
                         </v-btn>
+                        <span
+                            style="font-weight: 0.1em; font-size: 0.7em"
+                            class="ml-n4 text-warning"
+                            v-if="item.active === false">
+                            {{ item.message }}
+                        </span>
                     </v-list-item-title>
                 </v-list-item>
             </v-list>
@@ -55,7 +65,6 @@ import MenuView from './MenuView.vue';
 import { menus } from '@/services/menus';
 
 const drawer = ref(false);
-
 </script>
 
 <style>

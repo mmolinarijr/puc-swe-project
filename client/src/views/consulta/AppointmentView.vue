@@ -2,7 +2,7 @@
     <HeaderViewVue />
 
     <v-container
-        class="pt-6 mt-6"
+        class="pt-6 mt-6 mb-4"
         fluid>
         <v-row class="mt-6">
             <v-col>
@@ -15,17 +15,25 @@
 
                         <v-card-text>
                             <v-row>
-                                <v-col>
+                                <v-col
+                                    cols="12"
+                                    class="pb-0"
+                                    md="6">
                                     <v-text-field
                                         label="Id"
                                         v-model="searchParams.id"
+                                        :hide-details="true"
                                         type="number"
                                         dense>
                                     </v-text-field>
                                 </v-col>
-                                <v-col>
+                                <v-col
+                                    cols="12"
+                                    class="pb-0"
+                                    md="6">
                                     <v-text-field
                                         label="Data"
+                                        :hide-details="true"
                                         v-model="searchParams.date"
                                         type="date"
                                         dense>
@@ -38,6 +46,7 @@
                             <v-row>
                                 <v-col
                                     cols="12"
+                                    class="text-center text-md-start"
                                     md="6">
                                     <v-btn
                                         variant="text"
@@ -53,7 +62,7 @@
 
                                 <v-col
                                     cols="12"
-                                    class="text-end"
+                                    class="text-center text-md-end"
                                     md="6">
                                     <v-btn
                                         prepend-icon="mdi-backspace-outline"
@@ -130,7 +139,9 @@
         :submit="saveAppointment">
         <template #body>
             <v-row>
-                <v-col>
+                <v-col
+                    cols="12"
+                    md="6">
                     <v-autocomplete
                         label="Paciente"
                         v-model="form.user"
@@ -142,7 +153,9 @@
                         item-value="id">
                     </v-autocomplete>
                 </v-col>
-                <v-col>
+                <v-col
+                    cols="12"
+                    md="6">
                     <v-text-field
                         label="Data"
                         v-model="form.date"
@@ -156,7 +169,9 @@
             </v-row>
 
             <v-row>
-                <v-col>
+                <v-col
+                    cols="12"
+                    class="text-center">
                     <v-textarea
                         :rules="[(v) => !!v || 'Campo Obrigatorio']"
                         required

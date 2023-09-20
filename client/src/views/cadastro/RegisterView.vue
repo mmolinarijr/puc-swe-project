@@ -2,8 +2,8 @@
     <HeaderViewVue />
 
     <v-container
-        class="pt-6 mt-6"
-        fluid>
+        fluid
+        class="pt-6 mt-6 mb-4">
         <v-row class="mt-6">
             <v-col>
                 <v-form @submit.prevent="getUsers">
@@ -15,28 +15,40 @@
 
                         <v-card-text>
                             <v-row>
-                                <v-col>
+                                <v-col
+                                    class="pb-0"
+                                    md="3"
+                                    cols="12">
                                     <v-text-field
                                         label="Id"
-                                        outlined
+                                        :hide-details="true"
                                         dense>
                                     </v-text-field>
                                 </v-col>
-                                <v-col>
+                                <v-col
+                                    class="pb-0"
+                                    md="3"
+                                    cols="12">
                                     <v-text-field
                                         label="CPF"
-                                        outlined
+                                        :hide-details="true"
                                         dense>
                                     </v-text-field>
                                 </v-col>
-                                <v-col>
+                                <v-col
+                                    class="pb-0"
+                                    md="3"
+                                    cols="12">
                                     <v-text-field
                                         label="Nome"
-                                        outlined
+                                        :hide-details="true"
                                         dense>
                                     </v-text-field>
                                 </v-col>
-                                <v-col>
+                                <v-col
+                                    class="pb-0"
+                                    md="3"
+                                    cols="12">
                                     <v-text-field
                                         label="E-mail"
                                         outlined
@@ -50,6 +62,8 @@
                             <v-row>
                                 <v-col
                                     cols="12"
+                                    class="text-xs-center text-md-start text-center"
+                                    sm="12"
                                     md="6">
                                     <v-btn
                                         variant="text"
@@ -65,7 +79,8 @@
 
                                 <v-col
                                     cols="12"
-                                    class="text-end"
+                                    class="text-sm-center text-md-end text-center"
+                                    sm="12"
                                     md="6">
                                     <v-btn
                                         append-icon="mdi-account-search"
