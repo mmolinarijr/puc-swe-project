@@ -165,8 +165,23 @@ router.delete('/user/:id', async (req, res) => {
  *         description: successful response
  */
 router.get('/appointment', async (req, res) => {
-    console.log('GET /api/appointment', req.params.id);
-    res.send(await appointment.read());
+    try {
+        const params = req.query;
+        const getData = await appointment.read(params);
+        console.log('GET /api/appointment params', req.query);
+
+        console.log('GET /api/appointment getData', getData);
+
+        if (Array.isArray(getData)) {
+            res.send(getData);
+        } else {
+            res.status(404).json({ error: 'No appointment data found' });
+        }
+    } catch (error) {
+        console.error('GET /api/appointment', error);
+        res.status(500).send('Internal Server Error' + error);
+    }
+    // res.json(await appointment.read(req.query));
 });
 
 /**
