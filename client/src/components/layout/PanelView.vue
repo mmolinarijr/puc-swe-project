@@ -5,13 +5,28 @@
             :key="index"
             cols="12"
             md="4">
-            <v-card class="pa-2 ma-1 mt-5">
+            <v-card
+                :disabled="item.active === false"
+                class="pa-2 ma-1 mt-5">
                 <template #prepend>
                     <v-avatar size="50">
-                        <v-icon :color="item.color" size="50">
+                        <v-icon
+                            :color="item.color"
+                            size="50">
                             {{ item.icon }}
                         </v-icon>
                     </v-avatar>
+                </template>
+
+                <template
+                    v-if="item.active === false"
+                    #append>
+                    <v-icon
+                        :color="item.color"
+                        size="40">
+                        mdi-alert-circle
+                    </v-icon>
+                    {{ item.message }}
                 </template>
 
                 <v-card-item>

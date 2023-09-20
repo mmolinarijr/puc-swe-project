@@ -6,6 +6,7 @@ export const menus = [
         icon: 'mdi-form-select',
         color: 'primary',
         link: '/cadastro',
+        active: true,
     },
     {
         id: 2,
@@ -14,6 +15,7 @@ export const menus = [
         icon: 'mdi-medical-bag',
         color: 'secondary',
         link: '/consultas',
+        active: true,
     },
     {
         id: 3,
@@ -22,6 +24,8 @@ export const menus = [
         icon: 'mdi-file-search-outline',
         color: 'info',
         link: '/relatorios',
+        active: false,
+        message: 'Em breve',
     },
     {
         id: 4,
@@ -30,5 +34,7 @@ export const menus = [
         icon: 'mdi-cog-outline',
         color: 'warning',
         link: '/configuracoes',
+        active: false,
+        message: 'Em breve',
     },
 ];
