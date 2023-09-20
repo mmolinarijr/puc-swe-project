@@ -6,7 +6,7 @@
         fluid>
         <v-row class="mt-6">
             <v-col>
-                <v-form>
+                <v-form @submit.prevent="getUsers">
                     <v-card>
                         <v-card-title>
                             <GoBackBtnVue color="primary" />
@@ -19,19 +19,29 @@
                                     <v-text-field
                                         label="Id"
                                         outlined
-                                        dense></v-text-field>
+                                        dense>
+                                    </v-text-field>
+                                </v-col>
+                                <v-col>
+                                    <v-text-field
+                                        label="CPF"
+                                        outlined
+                                        dense>
+                                    </v-text-field>
                                 </v-col>
                                 <v-col>
                                     <v-text-field
                                         label="Nome"
                                         outlined
-                                        dense></v-text-field>
+                                        dense>
+                                    </v-text-field>
                                 </v-col>
                                 <v-col>
                                     <v-text-field
                                         label="E-mail"
                                         outlined
-                                        dense></v-text-field>
+                                        dense>
+                                    </v-text-field>
                                 </v-col>
                             </v-row>
                         </v-card-text>
@@ -60,6 +70,7 @@
                                     <v-btn
                                         append-icon="mdi-account-search"
                                         color="primary"
+                                        type="submit"
                                         variant="tonal">
                                         Pesquisar
                                     </v-btn>
@@ -78,6 +89,7 @@
                 <thead>
                     <tr>
                         <th scope="col">Id</th>
+                        <th scope="col">CPF</th>
                         <th scope="col">Nome</th>
                         <th scope="col">E-mail</th>
                         <th scope="col">Tipo</th>
@@ -94,13 +106,21 @@
                         v-for="(item, index) in apiData"
                         :key="index">
                         <td>{{ item.id }}</td>
+                        <td>{{ item.cpf }}</td>
                         <td>{{ item.name }}</td>
                         <td>{{ item.email }}</td>
                         <td>{{ item.type }}</td>
                         <td class="text-center">
                             <v-btn
+                                color="primary"
+                                @click="openModal('edit', item)"
+                                variant="text">
+                                <v-tooltip activator="parent">Editar</v-tooltip>
+                                <v-icon>mdi-pencil</v-icon>
+                            </v-btn>
+                            <v-btn
                                 color="red"
-                                @click="openModal(item.id)"
+                                @click="openModal('delete', item)"
                                 variant="text">
                                 <v-tooltip activator="parent">Deletar</v-tooltip>
                                 <v-icon>mdi-delete</v-icon>
@@ -174,6 +194,62 @@
         </template>
     </ModalView>
 
+    <!-- Edit User -->
+    <ModalView
+        title="Edição de Usuário"
+        v-model="modals.edit">
+        <template #body>
+            <v-row>
+                <v-col>
+                    <v-alert>{{ selectedItem.cpf }}</v-alert>
+                    <v-text-field
+                        label="CPF"
+                        type="number"
+                        v-model="form.cpf"
+                        outlined
+                        dense>
+                    </v-text-field>
+                </v-col>
+                <v-col>
+                    <v-alert>{{ selectedItem.name }}</v-alert>
+                    <v-text-field
+                        label="Nome"
+                        outlined
+                        v-model="form.name"
+                        dense>
+                    </v-text-field>
+                </v-col>
+                <v-col>
+                    <v-alert>{{ selectedItem.email }}</v-alert>
+                    <v-text-field
+                        label="E-mail"
+                        v-model="form.email"
+                        type="email"
+                        outlined
+                        dense>
+                    </v-text-field>
+                </v-col>
+            </v-row>
+        </template>
+
+        <template #footer>
+            <v-btn
+                color="primary"
+                @click="modals.edit = false">
+                Cancelar
+            </v-btn>
+            <v-btn
+                color="primary"
+                variant="tonal"
+                append-icon="mdi-account-plus"
+                @click="editUser(selectedItem)"
+                type="submit">
+                Salvar
+            </v-btn>
+        </template>
+    </ModalView>
+
+    <!-- Delete -->
     <ModalView
         :width="360"
         v-model="modals.delete">
@@ -205,7 +281,8 @@
 
     <LoadingView
         color="primary"
-        v-model="state.isLoading" />
+        v-model="state.isLoading">
+    </LoadingView>
 
     <FooterViewVue />
 </template>
@@ -229,6 +306,7 @@ const apiData = ref([]) as any;
 
 const modals = ref({
     register: false,
+    edit: false,
     delete: false,
 });
 
@@ -245,21 +323,54 @@ const form = ref({
     type: '',
 });
 
-watch(
-    () => modals.value.register,
-    () => {
-        if (modals.value.register) {
-            form.value.name = '';
-            form.value.email = '';
-            form.value.type = '';
-        }
-    }
-);
+watch(modals.value, () => {
+    console.log('watch modals', modals.value);
 
-const openModal = (item: any) => {
+    if (modals.value) {
+        form.value.name = '';
+        form.value.cpf = '';
+        form.value.email = '';
+        form.value.type = '';
+    }
+});
+
+const openModal = (type: string, item: any) => {
     console.log('openModal');
-    modals.value.delete = true;
     selectedItem.value = item;
+
+    switch (type) {
+        case 'edit':
+            modals.value.edit = true;
+            break;
+        case 'delete':
+            modals.value.delete = true;
+            break;
+    }
+};
+
+const editUser = async (item: any) => {
+    console.log('editUser');
+
+    const params = {
+        cpf: form.value.cpf !== '' ? form.value.cpf : item.cpf,
+        name: form.value.name !== '' ? form.value.name : item.name,
+        email: form.value.email !== '' ? form.value.email : item.email,
+    };
+
+    console.log('editUser - params', params);
+
+    try {
+        const response = await axios.put(`${api.value}/user/${item.id}`, params);
+
+        console.log('editUser - response', response);
+
+        if (response.data) {
+            modals.value.edit = false;
+            await getUsers();
+        }
+    } catch (error) {
+        console.error('editUser - error', error);
+    }
 };
 
 const deleteUser = async (id: number) => {
@@ -271,7 +382,7 @@ const deleteUser = async (id: number) => {
 
         await getUsers();
     } catch (error) {
-        console.log('error', error);
+        console.error('deleteUser - error', error);
     } finally {
         state.value.isLoading = false;
         modals.value.delete = false;
