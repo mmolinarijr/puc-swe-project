@@ -36,13 +36,13 @@ router.get('/', (req, res) => {
 router.post('/login', (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
         if (err) {
-            console.log('err - ', err);
+            console.log('router.post - err - ', err);
             return next(err);
         }
 
         if (!user) {
-            console.log('!user - ', user);
-            return res.status(401).json({ message: 'Authentication failed' });
+            console.log('router.post - !user - ', user);
+            return res.status(401).send({ message: 'Authentication failed' });
         }
 
         console.log('err - ', err);
@@ -110,11 +110,34 @@ router.post('/user', async (req, res) => {
 /**
  * @swagger
  * /api/user/{id}:
+ *   put:
+ *     tags:
+ *       - User
+ *     parameters: id
+ *     description: Edit an user by Id
+ *     responses:
+ *       '200':
+ *         description: successful response
+ */
+router.put('/user/:id', async (req, res) => {
+    try {
+        console.log('PUT /api/user', req.body);
+        await user.editById(req.params.id, req.body);
+        res.status(200).send('User edited successfully');
+    } catch (error) {
+        console.error('PUT /api/user', error);
+        res.status(500).send('Internal Server Error' + error);
+    }
+});
+
+/**
+ * @swagger
+ * /api/user/{id}:
  *   delete:
  *     tags:
  *       - User
  *     parameters: id
- *     description: Deletes a user by Id
+ *     description: Deletes an user by Id
  *     responses:
  *       '200':
  *         description: successful response

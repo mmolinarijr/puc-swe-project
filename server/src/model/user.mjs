@@ -57,6 +57,26 @@ async function readById(id) {
     }
 }
 
+async function editById(id, { name, cpf, email }) {
+    try {
+        const [user] = await sql`
+                update username
+                    set name = ${name},
+                        cpf = ${cpf},
+                        email = ${email}
+                    where id = ${id}
+                returning *;
+            `;
+
+        console.log('editById - ', user);
+
+        return user;
+    } catch (error) {
+        console.error('DB connection error', error);
+        return error;
+    }
+}
+
 async function deleteById(id) {
     try {
         const [user] = await sql`
@@ -72,4 +92,4 @@ async function deleteById(id) {
     }
 }
 
-export default { create, read, readById, deleteById };
+export default { create, read, readById, editById, deleteById };
