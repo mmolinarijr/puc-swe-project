@@ -81,6 +81,11 @@
                         <th scope="col">Nome</th>
                         <th scope="col">E-mail</th>
                         <th scope="col">Tipo</th>
+                        <th
+                            class="text-center"
+                            scope="col">
+                            Ação
+                        </th>
                     </tr>
                 </thead>
 
@@ -92,6 +97,15 @@
                         <td>{{ item.name }}</td>
                         <td>{{ item.email }}</td>
                         <td>{{ item.type }}</td>
+                        <td class="text-center">
+                            <v-btn
+                                color="red"
+                                @click="openModal(item.id)"
+                                variant="text">
+                                <v-tooltip activator="parent">Deletar</v-tooltip>
+                                <v-icon>mdi-delete</v-icon>
+                            </v-btn>
+                        </td>
                     </tr>
                 </tbody>
             </v-table>
@@ -102,9 +116,18 @@
     <ModalView
         v-model="modals.register"
         :submit="registerUser"
-        title="Cadastro de Usuarios do Sistema">
+        title="Cadastro de Usuários do Sistema">
         <template #body>
             <v-row>
+                <v-col>
+                    <v-text-field
+                        label="CPF"
+                        type="number"
+                        v-model="form.cpf"
+                        outlined
+                        dense>
+                    </v-text-field>
+                </v-col>
                 <v-col>
                     <v-text-field
                         label="Nome"
@@ -117,6 +140,7 @@
                     <v-text-field
                         label="E-mail"
                         v-model="form.email"
+                        type="email"
                         outlined
                         dense>
                     </v-text-field>
@@ -128,7 +152,8 @@
                     <v-select
                         v-model="form.type"
                         label="Tipo"
-                        :items="['medico', 'paciente']"></v-select>
+                        :items="['medico', 'paciente']">
+                    </v-select>
                 </v-col>
             </v-row>
         </template>
@@ -145,6 +170,35 @@
                 append-icon="mdi-account-plus"
                 type="submit">
                 Cadastrar
+            </v-btn>
+        </template>
+    </ModalView>
+
+    <ModalView
+        :width="360"
+        v-model="modals.delete">
+        <template #body>
+            <v-alert
+                class="text-start ma-2"
+                type="error"
+                variant="text">
+                Deseja realmente deletar o usuário?
+            </v-alert>
+        </template>
+
+        <template #footer>
+            <v-btn
+                color="primary"
+                @click="modals.delete = false">
+                Cancelar
+            </v-btn>
+            <v-btn
+                color="primary"
+                variant="tonal"
+                append-icon="mdi-account-minus"
+                @click="deleteUser(selectedItem)"
+                type="submit">
+                Deletar
             </v-btn>
         </template>
     </ModalView>
@@ -175,13 +229,17 @@ const apiData = ref([]) as any;
 
 const modals = ref({
     register: false,
+    delete: false,
 });
 
 const state = ref({
     isLoading: false,
 });
 
+const selectedItem = ref(undefined) as any;
+
 const form = ref({
+    cpf: '',
     name: '',
     email: '',
     type: '',
@@ -197,6 +255,28 @@ watch(
         }
     }
 );
+
+const openModal = (item: any) => {
+    console.log('openModal');
+    modals.value.delete = true;
+    selectedItem.value = item;
+};
+
+const deleteUser = async (id: number) => {
+    console.log('deleteUser');
+    try {
+        const response = await axios.delete(`${api.value}/user/${id}`);
+
+        console.log('deleteUser - response', response);
+
+        await getUsers();
+    } catch (error) {
+        console.log('error', error);
+    } finally {
+        state.value.isLoading = false;
+        modals.value.delete = false;
+    }
+};
 
 const getUsers = async () => {
     state.value.isLoading = true;
@@ -219,8 +299,9 @@ const registerUser = async () => {
     console.log('submit api', api.value);
 
     const params = {
+        cpf: form.value.cpf,
         name: form.value.name,
-        password: form.value.email,
+        password: form.value.name.toLowerCase(),
         type: form.value.type,
         email: form.value.email,
     };
