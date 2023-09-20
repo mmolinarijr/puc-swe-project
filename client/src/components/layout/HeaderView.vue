@@ -18,7 +18,7 @@
                     size="45">
                 </v-avatar>
                 <v-app-bar-title class="text-no-wrap text-end text-body-2 text-md-h6">
-                    Sistema de Gerenciamento de Consultas
+                    SGP - Sistema Gerenciador de Pacientes
                 </v-app-bar-title>
             </template>
 

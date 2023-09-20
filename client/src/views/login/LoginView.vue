@@ -14,7 +14,7 @@
                             class="mx-6 py-6 text-center"
                             justify-center
                             align-center>
-                            Sistema de Gerenciamento de Consultas
+                            SGP - Sistema Gerenciador de Pacientes
                             <v-img
                                 :width="300"
                                 class="mx-auto"
