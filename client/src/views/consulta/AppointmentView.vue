@@ -19,15 +19,7 @@
                                     <v-text-field
                                         label="Id"
                                         v-model="searchParams.id"
-                                        outlined
-                                        dense>
-                                    </v-text-field>
-                                </v-col>
-                                <v-col>
-                                    <v-text-field
-                                        label="Nome"
-                                        v-model="searchParams.name"
-                                        outlined
+                                        type="number"
                                         dense>
                                     </v-text-field>
                                 </v-col>
@@ -36,7 +28,6 @@
                                         label="Data"
                                         v-model="searchParams.date"
                                         type="date"
-                                        outlined
                                         dense>
                                     </v-text-field>
                                 </v-col>
@@ -65,6 +56,17 @@
                                     class="text-end"
                                     md="6">
                                     <v-btn
+                                        prepend-icon="mdi-backspace-outline"
+                                        @click="
+                                            searchParams.id = '';
+                                            searchParams.date = '';
+                                            getAppointments();
+                                        "
+                                        color="secondary"
+                                        variant="tonal">
+                                        limpar
+                                    </v-btn>
+                                    <v-btn
                                         append-icon="mdi-account-search"
                                         color="secondary"
                                         type="submit"
@@ -90,9 +92,19 @@
                         </th>
                         <th scope="col">Nome</th>
                         <th scope="col">Data</th>
-                        <th scope="col">Descricao</th>
+                        <th scope="col">Descrição</th>
                     </tr>
                 </thead>
+
+                <tbody v-if="noData">
+                    <tr>
+                        <td
+                            class="text-center"
+                            colspan="4">
+                            Nenhum resultado encontrado!
+                        </td>
+                    </tr>
+                </tbody>
 
                 <tbody>
                     <tr
@@ -115,7 +127,7 @@
         v-model="modals.appointment"
         :is-persistent="true"
         title="Nova Consulta"
-        :submit="submit">
+        :submit="saveAppointment">
         <template #body>
             <v-row>
                 <v-col>
@@ -173,7 +185,15 @@
 
     <LoadingView
         color="secondary"
-        v-model="state.isLoading" />
+        v-model="state.isLoading">
+    </LoadingView>
+
+    <AlertView
+        v-model="alert.display"
+        :color="alert.color"
+        :message="alert.text"
+        :icon="alert.icon">
+    </AlertView>
 
     <FooterViewVue />
 </template>
@@ -181,8 +201,10 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue';
 import { userStore } from '@/stores/user';
-import axios from 'axios';
 import { convertDate } from '../../utils/common';
+import axios from 'axios';
+import Alert from '@/services/Alert';
+import AlertView from '@/components/layout/AlertView.vue';
 import HeaderViewVue from '@/components/layout/HeaderView.vue';
 import FooterViewVue from '@/components/layout/FooterView.vue';
 import GoBackBtnVue from '@/components/layout/GoBackBtn.vue';
@@ -196,6 +218,9 @@ onMounted(async () => {
 
 const api = ref(import.meta.env.VITE_API_URL);
 const apiData = ref([]) as any;
+const noData = ref(false);
+
+const alert = ref(new Alert());
 
 const modals = ref({
     appointment: false,
@@ -243,10 +268,39 @@ const getAppointments = async () => {
 
     state.value.isLoading = true;
 
+    const params = {} as any;
+
+    for (const [param, value] of Object.entries(searchParams.value)) {
+        if (value !== '') {
+            console.log('3333333 - items', value);
+            params[param] = value;
+        }
+    }
+
+    console.log('getAppointments - params', params);
+
+    const queryParams = [];
+
+    if (params.id !== undefined) {
+        queryParams.push(`id=${params.id}`);
+    }
+
+    if (params.date !== undefined) {
+        queryParams.push(`date=${params.date}`);
+    }
+
+    const queryString = queryParams.join('&');
+
     try {
-        const response = await axios.get(`${api.value}/appointment`);
+        const response = await axios.get(`${api.value}/appointment?${queryString}`);
 
         console.log('getData - response', response);
+
+        if (response.data.length === 0) {
+            noData.value = true;
+        } else {
+            noData.value = false;
+        }
 
         apiData.value = response.data;
     } catch (error) {
@@ -256,8 +310,9 @@ const getAppointments = async () => {
     }
 };
 
-const submit = async () => {
+const saveAppointment = async () => {
     console.log('submit form', form.value);
+    alert.value.hide();
 
     const params = {
         user_id: form.value.user,
@@ -274,9 +329,11 @@ const submit = async () => {
         if (response.status === 200) {
             modals.value.appointment = false;
             await getAppointments();
+            alert.value.show('Consulta salva com sucesso', 'mdi-check-circle', 'success');
         }
     } catch (error) {
         console.log('error', error);
+        alert.value.show('Erro ao salvar consulta', 'mdi-alert-circle', 'error');
     }
 };
 </script>
