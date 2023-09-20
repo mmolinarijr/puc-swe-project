@@ -13,21 +13,25 @@ passport.use(
 
             console.log('000 - user - ', user);
 
-            if (!user) {
-                console.log('001 - Incorrect username.');
+            if (user.length !== 0) {
+                if (!user) {
+                    console.log('001 - Incorrect username.');
+                    return done(null, false, { message: 'Incorrect username.' });
+                }
+
+                const isPasswordValid = await bcrypt.compare(password, user[0].password);
+
+                console.log('isPasswordValid - ', isPasswordValid);
+
+                if (!isPasswordValid) {
+                    console.log('002 - Incorrect password.');
+                    return done(null, false, { message: 'Incorrect password.' });
+                }
+
+                return done(null, user);
+            } else {
                 return done(null, false, { message: 'Incorrect username.' });
             }
-
-            const isPasswordValid = await bcrypt.compare(password, user[0].password);
-
-            console.log('isPasswordValid - ', isPasswordValid);
-
-            if (!isPasswordValid) {
-                console.log('002 - Incorrect password.');
-                return done(null, false, { message: 'Incorrect password.' });
-            }
-
-            return done(null, user);
         } catch (error) {
             console.log('003 - Error - ', error);
             return done(error);
