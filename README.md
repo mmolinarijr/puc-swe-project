@@ -11,3 +11,7 @@ Final Project for PUC Minas Software Engineer post graduation program.
 * Hosted on: [Glitch](https://glitch.com/)
 * [Acessar API](https://puc-swe-project-api.glitch.me/api/)
 * Swagger: [/api-docs](https://puc-swe-project-api.glitch.me/api-docs)
+
+## Database
+* Postgres
+* Hosted on: [Neon](https://neon.tech/)
