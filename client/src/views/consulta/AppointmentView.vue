@@ -268,7 +268,7 @@ const form = ref({
     user: undefined,
     date: '',
     description: '',
-});
+}) as any;
 
 const getUser = async () => {
     const response = await userStore().getUser();
@@ -325,30 +325,43 @@ const getAppointments = async () => {
     }
 };
 
+const validateForm = () => {
+    console.log('validateForm', form.value);
+    if (form.value.user !== '' && form.value.date !== '' && form.value.description !== '') {
+        return true;
+    }
+
+    return false;
+};
+
 const saveAppointment = async () => {
     console.log('submit form', form.value);
     alert.value.hide();
 
-    const params = {
-        user_id: form.value.user,
-        date: form.value.date,
-        description: form.value.description,
-    };
+    if (validateForm()) {
+        const params = {
+            user_id: form.value.user,
+            date: form.value.date,
+            description: form.value.description,
+        };
 
-    console.log('submit params', params);
+        console.log('submit params', params);
 
-    try {
-        const response = await axios.post(`${api.value}/appointment`, params);
-        console.log('submit - response', response);
+        try {
+            const response = await axios.post(`${api.value}/appointment`, params);
+            console.log('submit - response', response);
 
-        if (response.status === 200) {
-            modals.value.appointment = false;
-            await getAppointments();
-            alert.value.show('Consulta salva com sucesso', 'mdi-check-circle', 'success');
+            if (response.status === 200) {
+                modals.value.appointment = false;
+                await getAppointments();
+                alert.value.show('Consulta salva com sucesso', 'mdi-check-circle', 'success');
+            }
+        } catch (error) {
+            console.log('error', error);
+            alert.value.show('Erro ao salvar consulta', 'mdi-alert-circle', 'error');
         }
-    } catch (error) {
-        console.log('error', error);
-        alert.value.show('Erro ao salvar consulta', 'mdi-alert-circle', 'error');
+    } else {
+        alert.value.show('Preencha todos os campos', 'mdi-alert-circle', 'error');
     }
 };
 </script>
