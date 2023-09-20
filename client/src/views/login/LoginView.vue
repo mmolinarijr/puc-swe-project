@@ -49,7 +49,7 @@
                                         outlined
                                         :rules="[
                                             (v) => !!v || 'Senha é obrigatória',
-                                            (v) => v.length >= 6 || 'Senha deve ter no mínimo 6 caracteres',
+                                            (v) => v.length >= 3 || 'Senha deve ter no mínimo 3 caracteres',
                                         ]"
                                         dense
                                         required

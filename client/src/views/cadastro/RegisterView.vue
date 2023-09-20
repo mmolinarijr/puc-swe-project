@@ -397,7 +397,7 @@ const getUsers = async () => {
 
         console.log('getUsers - response', response);
 
-        apiData.value = response.data;
+        apiData.value = response.data.filter((item: any) => item.type !== 'admin');
     } catch (error) {
         console.log('error', error);
     } finally {
