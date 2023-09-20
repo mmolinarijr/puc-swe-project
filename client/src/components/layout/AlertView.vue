@@ -1,13 +1,22 @@
 <template>
-    <v-snackbar :color="props.color">
-        {{ message }}
-        <v-btn>
-            Fechar
-        </v-btn>
+    <v-snackbar
+        :timeout="props.timeout"
+        :color="props.color">
+        <v-icon>{{ props.icon }}</v-icon>
+        {{ props.message }}
+        <template #actions>
+            <v-btn
+                color="white"
+                @click="emit">
+                Fechar
+            </v-btn>
+        </template>
     </v-snackbar>
 </template>
 
 <script setup lang="ts">
+const emits = defineEmits(['update:modelValue']);
+
 const props = defineProps({
     message: {
         type: String,
@@ -15,17 +24,19 @@ const props = defineProps({
     },
     color: {
         type: String,
-        required: false,
         default: 'success',
     },
     timeout: {
         type: Number,
-        required: false,
         default: 3000,
     },
+    icon: {
+        type: String,
+        default: 'mdi-check-circle',
+    },
 });
+
+const emit = () => {
+    emits('update:modelValue', false);
+};
 </script>
-
-<style scoped>
-
-</style>
