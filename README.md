@@ -8,10 +8,11 @@ Final Project for PUC Minas Software Engineer post graduation program.
 
 ## Backend
 * NodeJs + ExpressJs
-* Hosted on: [Glitch](https://glitch.com/)
-* [Acessar API](https://puc-swe-project-api.glitch.me/api/)
-* Swagger: [/api-docs](https://puc-swe-project-api.glitch.me/api-docs)
+* Hosted on: [Cyclic](https://www.cyclic.sh/)
+* [Acessar API](https://glorious-frog-blazer.cyclic.app/api/)
+* Swagger: [/api-docs](https://glorious-frog-blazer.cyclic.app/api-docs)
 
 ## Database
 * Postgres
 * Hosted on: [Neon](https://neon.tech/)
+
