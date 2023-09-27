@@ -1,5 +1,5 @@
 import sql from '../config/db.mjs';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 async function create({ name, password, type, email }) {
     function hashPassword(passwords) {
