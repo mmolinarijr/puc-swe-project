@@ -5,8 +5,8 @@
     "main": "app.mjs",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "nodemon app.mjs",
-        "build": "node app.mjs"
+        "start": "node app.mjs",
+        "dev": "nodemon app.mjs"
     },
     "author": "mmolinarijr",
     "type": "module",
