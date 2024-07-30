@@ -98,8 +98,6 @@ import Alert from '@/services/Alert';
 
 const api = ref(import.meta.env.VITE_API_URL);
 
-// const alert = new Alert();
-
 const alert = ref(new Alert());
 
 const router = useRouter();
@@ -112,14 +110,12 @@ const form = ref({
 });
 
 const validate = () => {
-    console.log('validate', form.value);
     if (form.value.username && form.value.password) {
         return true;
     }
 };
 
 const login = async () => {
-    console.log('login', form.value);
     alert.value.hide();
 
     if (validate()) {
@@ -130,9 +126,7 @@ const login = async () => {
 
             if (response?.status === 200 && response?.data.message === 'User logged in successfully') {
                 router.push('/home');
-            } else {
-                console.log('01 LOGIN else negative - response', response);
-            }
+            } 
         } catch (error) {
             console.error('Login Error :: ', error);
 

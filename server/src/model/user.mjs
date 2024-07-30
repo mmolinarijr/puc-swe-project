@@ -33,8 +33,6 @@ async function read() {
             select * from username;
         `;
 
-        console.log('11read - ', users);
-
         return users;
     } catch (error) {
         console.error('DB connection error', error);
@@ -47,8 +45,6 @@ async function readById(id) {
         const [user] = await sql`
             select * from username where id = ${id};
         `;
-
-        console.log('readById - ', user);
 
         return user;
     } catch (error) {
@@ -68,8 +64,6 @@ async function editById(id, { name, cpf, email }) {
                 returning *;
             `;
 
-        console.log('editById - ', user);
-
         return user;
     } catch (error) {
         console.error('DB connection error', error);
@@ -82,8 +76,6 @@ async function deleteById(id) {
         const [user] = await sql`
             delete from username where id = ${id};
         `;
-
-        console.log('deleteById - ', user);
 
         return user;
     } catch (error) {

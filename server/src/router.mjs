@@ -18,7 +18,6 @@ const router = express.Router();
  *         description: successful response
  */
 router.get('/', (req, res) => {
-    console.log('GET /api');
     res.send('Puc SWE Project API');
 });
 
@@ -36,18 +35,12 @@ router.get('/', (req, res) => {
 router.post('/login', (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
         if (err) {
-            console.log('router.post - err - ', err);
             return next(err);
         }
 
         if (!user) {
-            console.log('router.post - !user - ', user);
             return res.status(401).send({ message: 'Authentication failed' });
         }
-
-        console.log('err - ', err);
-        console.log('user - ', user);
-        console.log('info - ', info);
 
         return res.status(200).json({ message: 'User logged in successfully' });
     })(req, res, next);
@@ -65,7 +58,6 @@ router.post('/login', (req, res, next) => {
  *         description: successful response
  */
 router.get('/version', async (req, res) => {
-    console.log('GET /api/version');
     res.send(await version);
 });
 
@@ -81,7 +73,6 @@ router.get('/version', async (req, res) => {
  *         description: successful response
  */
 router.get('/user', async (req, res) => {
-    console.log('GET /api/user');
     res.send(await user.read());
 });
 
@@ -98,7 +89,6 @@ router.get('/user', async (req, res) => {
  */
 router.post('/user', async (req, res) => {
     try {
-        console.log('POST /api/user', req.body);
         await user.create(req.body);
         res.status(200).send('User created');
     } catch (error) {
@@ -121,7 +111,6 @@ router.post('/user', async (req, res) => {
  */
 router.put('/user/:id', async (req, res) => {
     try {
-        console.log('PUT /api/user', req.body);
         await user.editById(req.params.id, req.body);
         res.status(200).send('User edited successfully');
     } catch (error) {
@@ -144,7 +133,6 @@ router.put('/user/:id', async (req, res) => {
  */
 router.delete('/user/:id', async (req, res) => {
     try {
-        console.log('DELETE /api/user', req.params.id);
         await user.deleteById(req.params.id);
         res.status(200).send('User deleted successfully');
     } catch (error) {
@@ -168,9 +156,6 @@ router.get('/appointment', async (req, res) => {
     try {
         const params = req.query;
         const getData = await appointment.read(params);
-        console.log('GET /api/appointment params', req.query);
-
-        console.log('GET /api/appointment getData', getData);
 
         if (Array.isArray(getData)) {
             res.send(getData);
@@ -197,7 +182,6 @@ router.get('/appointment', async (req, res) => {
  */
 router.post('/appointment', async (req, res) => {
     try {
-        console.log('POST /api/appointment', req.params.id, req.body);
         await appointment.create(req.body);
         res.status(200).send('Appointment created successfully');
     } catch (error) {

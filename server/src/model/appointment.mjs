@@ -18,9 +18,6 @@ async function create({ user_id, description, date }) {
 }
 
 async function read(params) {
-    console.log('async function read params', params);
-    console.log('async function read !params', !params);
-
     try {
         if (params.id && params.date) {
             const appointment = await sql`
@@ -68,21 +65,5 @@ async function read(params) {
         return error;
     }
 }
-
-// async function read(params) {
-//     console.log('async function read params', params);
-//     try {
-//         const appointment = await sql`
-//             select appointment.*, username.name
-//             from appointment
-//             join username on appointment.user_id = username.id;
-//         `;
-
-//         return appointment;
-//     } catch (error) {
-//         console.error('DB connection error', error);
-//         return error;
-//     }
-// }
 
 export default { create, read };

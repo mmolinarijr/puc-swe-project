@@ -12,8 +12,6 @@ export default class Alert {
     // }
 
     show(message: string = 'Sucesso', icon: string = 'mdi-alert-outlined', color: string = 'success') {
-        console.log('Alert.show() message', message);
-
         this.display = true;
         this.text = message;
         this.icon = icon;

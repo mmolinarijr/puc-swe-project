@@ -21,7 +21,6 @@ const vuetify = createVuetify({
         },
     },
     theme: {
-        // defaultTheme: localStorage.getItem('theme') ?? 'light',
         defaultTheme: 'light',
     },
     components,

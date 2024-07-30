@@ -312,7 +312,6 @@ import ModalView from '@/components/layout/ModalView.vue';
 import LoadingView from '@/components/layout/LoadingView.vue';
 
 onMounted(async () => {
-    console.log('mounted');
     await getUsers();
 });
 
@@ -339,8 +338,6 @@ const form = ref({
 });
 
 watch(modals.value, () => {
-    console.log('watch modals', modals.value);
-
     if (modals.value) {
         form.value.name = '';
         form.value.cpf = '';
@@ -350,7 +347,6 @@ watch(modals.value, () => {
 });
 
 const openModal = (type: string, item: any) => {
-    console.log('openModal');
     selectedItem.value = item;
 
     switch (type) {
@@ -364,20 +360,14 @@ const openModal = (type: string, item: any) => {
 };
 
 const editUser = async (item: any) => {
-    console.log('editUser');
-
     const params = {
         cpf: form.value.cpf !== '' ? form.value.cpf : item.cpf,
         name: form.value.name !== '' ? form.value.name : item.name,
         email: form.value.email !== '' ? form.value.email : item.email,
     };
 
-    console.log('editUser - params', params);
-
     try {
         const response = await axios.put(`${api.value}/user/${item.id}`, params);
-
-        console.log('editUser - response', response);
 
         if (response.data) {
             modals.value.edit = false;
@@ -389,11 +379,8 @@ const editUser = async (item: any) => {
 };
 
 const deleteUser = async (id: number) => {
-    console.log('deleteUser');
     try {
         const response = await axios.delete(`${api.value}/user/${id}`);
-
-        console.log('deleteUser - response', response);
 
         await getUsers();
     } catch (error) {
@@ -410,20 +397,15 @@ const getUsers = async () => {
     try {
         const response = await axios.get(`${api.value}/user`);
 
-        console.log('getUsers - response', response);
-
         apiData.value = response.data.filter((item: any) => item.type !== 'admin');
     } catch (error) {
-        console.log('error', error);
+        console.error('error', error);
     } finally {
         state.value.isLoading = false;
     }
 };
 
 const registerUser = async () => {
-    console.log('submit form', form.value);
-    console.log('submit api', api.value);
-
     const params = {
         cpf: form.value.cpf,
         name: form.value.name,
@@ -434,10 +416,8 @@ const registerUser = async () => {
 
     try {
         const response = await axios.post(`${api.value}/user`, params);
-
-        console.log('submit - response', response);
     } catch (error) {
-        console.log('error', error);
+        console.error('error', error);
     } finally {
         modals.value.register = false;
         await getUsers();

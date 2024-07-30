@@ -273,26 +273,20 @@ const form = ref({
 const getUser = async () => {
     const response = await userStore().getUser();
     const filteredResponse = response.filter((item: any) => item.type === 'paciente');
-    console.log('22 getUser users', response);
 
     users.value = filteredResponse;
 };
 
 const getAppointments = async () => {
-    console.log('get data');
-
     state.value.isLoading = true;
 
     const params = {} as any;
 
     for (const [param, value] of Object.entries(searchParams.value)) {
         if (value !== '') {
-            console.log('3333333 - items', value);
             params[param] = value;
         }
     }
-
-    console.log('getAppointments - params', params);
 
     const queryParams = [];
 
@@ -309,8 +303,6 @@ const getAppointments = async () => {
     try {
         const response = await axios.get(`${api.value}/appointment?${queryString}`);
 
-        console.log('getData - response', response);
-
         if (response.data.length === 0) {
             noData.value = true;
         } else {
@@ -319,14 +311,13 @@ const getAppointments = async () => {
 
         apiData.value = response.data;
     } catch (error) {
-        console.log('error', error);
+        console.error('error', error);
     } finally {
         state.value.isLoading = false;
     }
 };
 
 const validateForm = () => {
-    console.log('validateForm', form.value);
     if (form.value.user !== '' && form.value.date !== '' && form.value.description !== '') {
         return true;
     }
@@ -335,7 +326,6 @@ const validateForm = () => {
 };
 
 const saveAppointment = async () => {
-    console.log('submit form', form.value);
     alert.value.hide();
 
     if (validateForm()) {
@@ -345,11 +335,8 @@ const saveAppointment = async () => {
             description: form.value.description,
         };
 
-        console.log('submit params', params);
-
         try {
             const response = await axios.post(`${api.value}/appointment`, params);
-            console.log('submit - response', response);
 
             if (response.status === 200) {
                 modals.value.appointment = false;
@@ -357,7 +344,6 @@ const saveAppointment = async () => {
                 alert.value.show('Consulta salva com sucesso', 'mdi-check-circle', 'success');
             }
         } catch (error) {
-            console.log('error', error);
             alert.value.show('Erro ao salvar consulta', 'mdi-alert-circle', 'error');
         }
     } else {
